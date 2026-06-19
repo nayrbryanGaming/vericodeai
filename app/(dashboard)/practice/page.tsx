@@ -1,172 +1,176 @@
 "use client";
-// API_KEY: GET /api/practice/problems?topic={topic}&difficulty={difficulty}&company={company}&language={language}&status={status}&sort={sort} — returns: Problem[]
-import { useState } from "react";
-import { Search, Star, CheckCircle2 } from "lucide-react";
-import { cn } from "@/lib/utils";
-
-const topics = ["All Topics", "Algorithms", "Arrays & Strings", "Data Structures", "Interview Prep", "Problem Solving"];
-const difficulties = ["All", "Easy", "Medium", "Hard"];
+import { useState, useEffect } from "react";
+import { Search, Filter, ChevronRight, Play, CheckCircle2, Lock } from "lucide-react";
 
 const problems = [
-  { id: 1, title: "Binary Search", difficulty: "Easy", acceptance: "57.0%", topic: "Algorithms", solved: true, starred: true },
-  { id: 2, title: "Median of Two Sorted Arrays", difficulty: "Hard", acceptance: "56.4%", topic: "Algorithms", solved: false, starred: false },
-  { id: 3, title: "Fibonacci Number", difficulty: "Easy", acceptance: "66.5%", topic: "Algorithms", solved: false, starred: false },
-  { id: 4, title: "Climbing Stairs", difficulty: "Easy", acceptance: "50.0%", topic: "Algorithms", solved: false, starred: false },
-  { id: 5, title: "Reverse String Recursively", difficulty: "Easy", acceptance: "42.2%", topic: "Arrays & Strings", solved: false, starred: false },
-  { id: 6, title: "Find First and Last Position of Element in Sorted Array", difficulty: "Medium", acceptance: "45.8%", topic: "Algorithms", solved: false, starred: false },
-  { id: 7, title: "Sort an Array", difficulty: "Medium", acceptance: "38.1%", topic: "Algorithms", solved: false, starred: false },
-  { id: 8, title: "Two Sum", difficulty: "Easy", acceptance: "72.3%", topic: "Arrays & Strings", solved: true, starred: false },
-  { id: 9, title: "Longest Substring Without Repeating Characters", difficulty: "Medium", acceptance: "34.5%", topic: "Arrays & Strings", solved: false, starred: false },
-  { id: 10, title: "Merge Intervals", difficulty: "Medium", acceptance: "47.8%", topic: "Arrays & Strings", solved: false, starred: false },
-  { id: 11, title: "Maximum Depth of Binary Tree", difficulty: "Easy", acceptance: "74.0%", topic: "Data Structures", solved: false, starred: false },
-  { id: 12, title: "Valid Parentheses", difficulty: "Easy", acceptance: "69.2%", topic: "Data Structures", solved: false, starred: false },
+  { id: 1, title: "Two Sum", difficulty: "Easy", category: "Arrays", status: "unsolved", acceptance: "49.2%" },
+  { id: 2, title: "Add Two Numbers", difficulty: "Medium", category: "Linked List", status: "unsolved", acceptance: "40.1%" },
+  { id: 3, title: "Longest Substring Without Repeating Characters", difficulty: "Medium", category: "Strings", status: "unsolved", acceptance: "33.8%" },
+  { id: 4, title: "Median of Two Sorted Arrays", difficulty: "Hard", category: "Arrays", status: "unsolved", acceptance: "36.6%" },
+  { id: 5, title: "Longest Palindromic Substring", difficulty: "Medium", category: "Strings", status: "unsolved", acceptance: "32.4%" },
+  { id: 6, title: "Zigzag Conversion", difficulty: "Medium", category: "Strings", status: "unsolved", acceptance: "44.9%" },
+  { id: 7, title: "Reverse Integer", difficulty: "Medium", category: "Math", status: "unsolved", acceptance: "27.4%" },
+  { id: 8, title: "String to Integer (atoi)", difficulty: "Medium", category: "Strings", status: "unsolved", acceptance: "16.7%" },
+  { id: 9, title: "Palindrome Number", difficulty: "Easy", category: "Math", status: "unsolved", acceptance: "53.5%" },
+  { id: 10, title: "Regular Expression Matching", difficulty: "Hard", category: "Strings", status: "unsolved", acceptance: "28.0%" },
 ];
 
-const diffColor: Record<string, string> = {
-  Easy: "text-green-600 bg-green-50",
-  Medium: "text-yellow-600 bg-yellow-50",
-  Hard: "text-red-600 bg-red-50",
-};
+const categories = ["All", "Arrays", "Strings", "Linked List", "Math", "DP", "Trees"];
 
 export default function PracticePage() {
-  const [topic, setTopic] = useState("All Topics");
-  const [diff, setDiff] = useState("All");
-  const [search, setSearch] = useState("");
-  const [sort, setSort] = useState("Default Order");
-  const [filter, setFilter] = useState("All Challenges");
-
-  const filtered = problems.filter(
-    (p) =>
-      (topic === "All Topics" || p.topic === topic) &&
-      (diff === "All" || p.difficulty === diff) &&
-      p.title.toLowerCase().includes(search.toLowerCase())
-  );
-
-  const solved = problems.filter((p) => p.solved).length;
+  const [activeCategory, setActiveCategory] = useState("All");
 
   return (
-    <div className="space-y-5 max-w-4xl">
-      <div className="flex items-center justify-between">
-        <h1 className="text-xl font-bold text-gray-900">Practice</h1>
-        <div className="relative">
-          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-          <input
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search questions..."
-            className="pl-9 pr-3 py-1.5 text-sm border border-gray-200 rounded-lg bg-gray-50 outline-none focus:bg-white focus:border-blue-400 focus:ring-2 focus:ring-blue-100 w-52 transition-all"
-          />
+    <div className="max-w-6xl space-y-6">
+      <div className="flex items-end justify-between">
+        <div>
+          <h1 className="text-xl font-bold text-foreground">Practice Problems</h1>
+          <p className="text-sm text-muted-foreground mt-0.5">Solve coding challenges to improve your skills.</p>
         </div>
       </div>
 
-      {/* Progress bar */}
-      <div className="bg-white border border-gray-200 rounded-xl p-4">
-        <div className="flex items-center justify-between text-sm mb-2">
-          <span className="font-medium text-gray-700">{solved} / {problems.length} solved</span>
-          <span className="text-gray-400">{Math.round((solved / problems.length) * 100)}% complete</span>
-        </div>
-        <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
-          <div className="h-full bg-blue-500 rounded-full transition-all" style={{ width: `${(solved / problems.length) * 100}%` }} />
-        </div>
-      </div>
-
-      {/* Topic tabs */}
-      <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-thin">
-        {topics.map((t) => (
-          <button
-            key={t}
-            onClick={() => setTopic(t)}
-            className={cn(
-              "shrink-0 flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-full border transition-colors",
-              topic === t ? "bg-pink-500 text-white border-pink-500" : "border-gray-200 text-gray-600 hover:border-gray-400"
-            )}
-          >
-            {t}
-          </button>
-        ))}
-      </div>
-
-      {/* Filters row */}
-      <div className="flex items-center gap-4 text-xs text-gray-500">
-        <div className="flex items-center gap-1.5">
-          <span className="font-medium text-gray-400 uppercase tracking-wide">SORT:</span>
-          <select
-            value={sort}
-            onChange={(e) => setSort(e.target.value)}
-            className="border border-gray-200 rounded px-2 py-1 bg-white text-gray-700 outline-none text-xs"
-          >
-            <option>Default Order</option>
-            <option>Acceptance Rate</option>
-            <option>Difficulty</option>
-          </select>
-        </div>
-        <div className="flex items-center gap-1.5">
-          <span className="font-medium text-gray-400 uppercase tracking-wide">FILTER:</span>
-          <select
-            value={filter}
-            onChange={(e) => setFilter(e.target.value)}
-            className="border border-gray-200 rounded px-2 py-1 bg-white text-gray-700 outline-none text-xs"
-          >
-            <option>All Challenges</option>
-            <option>Unsolved</option>
-            <option>Solved</option>
-            <option>Bookmarked</option>
-          </select>
-        </div>
-        <div className="flex items-center gap-1.5 ml-auto">
-          {difficulties.map((d) => (
-            <button
-              key={d}
-              onClick={() => setDiff(d)}
-              className={cn(
-                "px-2.5 py-1 rounded-md border transition-colors",
-                diff === d ? "bg-gray-900 text-white border-gray-900" : "border-gray-200 text-gray-600 hover:border-gray-400"
-              )}
-            >
-              {d}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Problem list */}
-      <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
-        <div className="divide-y divide-gray-100">
-          {filtered.map((p, i) => (
-            <div
-              key={p.id}
-              className="flex items-center gap-4 px-4 py-3 hover:bg-gray-50 cursor-pointer group transition-colors"
-            >
-              <span className="text-sm text-gray-400 w-6 shrink-0 text-right">{i + 1}.</span>
-              {p.solved ? (
-                <CheckCircle2 size={15} className="text-green-500 shrink-0" />
-              ) : (
-                <div className="w-[15px] h-[15px] rounded-full border-2 border-gray-200 shrink-0" />
-              )}
-              <div className="flex-1 min-w-0">
-                <span className="text-sm font-medium text-gray-800 group-hover:text-blue-600 transition-colors">
-                  {p.title}
-                </span>
+      <div className="flex gap-4">
+        {/* Main problem list */}
+        <div className="flex-1 space-y-4">
+          <div className="flex gap-3">
+            <div className="relative flex-1">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <Search className="h-4 w-4 text-muted-foreground" />
               </div>
-              <span className={cn("text-xs font-medium px-2 py-0.5 rounded-full shrink-0", diffColor[p.difficulty])}>
-                {p.difficulty}
-              </span>
-              <span className="text-xs text-gray-400 w-14 text-right shrink-0">{p.acceptance}</span>
-              <button
-                className={cn("shrink-0 transition-colors", p.starred ? "text-yellow-500" : "text-gray-300 hover:text-yellow-400")}
-                onClick={(e) => e.stopPropagation()}
-              >
-                <Star size={14} fill={p.starred ? "currentColor" : "none"} />
-              </button>
+              <input
+                type="text"
+                placeholder="Search problems..."
+                className="block w-full pl-10 pr-3 py-2 border border-border rounded-lg bg-card text-foreground focus:ring-2 focus:ring-brand focus:border-brand sm:text-sm"
+              />
             </div>
-          ))}
+            <button className="flex items-center gap-2 px-4 py-2 bg-card border border-border rounded-lg text-sm font-medium text-foreground hover:bg-muted transition-colors">
+              <Filter className="w-4 h-4" />
+              Filters
+            </button>
+          </div>
+
+          <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-thin">
+            {categories.map((c) => (
+              <button
+                key={c}
+                onClick={() => setActiveCategory(c)}
+                className={`whitespace-nowrap px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
+                  activeCategory === c
+                    ? "bg-foreground text-background"
+                    : "bg-card border border-border text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                {c}
+              </button>
+            ))}
+          </div>
+
+          <div className="bg-card rounded-xl border border-border overflow-hidden">
+            <table className="min-w-full divide-y divide-border">
+              <thead className="bg-muted/30">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Status</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Title</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Acceptance</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Difficulty</th>
+                </tr>
+              </thead>
+              <tbody className="bg-card divide-y divide-border">
+                {problems.map((p) => (
+                  <tr key={p.id} className="hover:bg-muted/50 cursor-pointer transition-colors group">
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {p.status === "solved" ? (
+                        <CheckCircle2 className="w-5 h-5 text-green-500" />
+                      ) : p.status === "attempted" ? (
+                        <Play className="w-5 h-5 text-brand" />
+                      ) : (
+                        <div className="w-5 h-5 rounded-full border-2 border-border group-hover:border-brand/50 transition-colors" />
+                      )}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex flex-col">
+                        <span className="text-sm font-medium text-foreground group-hover:text-brand transition-colors">
+                          {p.id}. {p.title}
+                        </span>
+                        <span className="text-xs text-muted-foreground">{p.category}</span>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">
+                      {p.acceptance}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                        p.difficulty === "Easy" ? "bg-green-100 text-green-800 dark:bg-green-500/10 dark:text-green-500" :
+                        p.difficulty === "Medium" ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-500/10 dark:text-yellow-500" :
+                        "bg-red-100 text-red-800 dark:bg-red-500/10 dark:text-red-500"
+                      }`}>
+                        {p.difficulty}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
 
-        {filtered.length === 0 && (
-          <div className="py-16 text-center text-gray-400">
-            <p className="text-sm">No problems found matching your filters.</p>
+        {/* Sidebar */}
+        <div className="w-80 shrink-0 space-y-4">
+          <div className="bg-card rounded-xl border border-border p-5">
+            <h3 className="font-semibold text-foreground mb-4">Study Plan</h3>
+            <div className="space-y-4">
+              <div className="relative group cursor-pointer">
+                <div className="absolute inset-0 bg-gradient-to-r from-brand to-purple-600 rounded-lg blur opacity-25 group-hover:opacity-40 transition-opacity" />
+                <div className="relative bg-card border border-border p-4 rounded-lg flex items-center justify-between">
+                  <div>
+                    <h4 className="font-bold text-foreground">Top Interview 150</h4>
+                    <p className="text-xs text-muted-foreground mt-1">0/150 Solved</p>
+                  </div>
+                  <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:text-foreground transition-colors" />
+                </div>
+              </div>
+
+              <div className="relative group cursor-not-allowed opacity-75">
+                <div className="relative bg-muted border border-border p-4 rounded-lg flex items-center justify-between">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <Lock className="w-3.5 h-3.5 text-muted-foreground" />
+                      <h4 className="font-bold text-foreground">System Design</h4>
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-1">Premium Plan Only</p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-        )}
+
+          <div className="bg-card rounded-xl border border-border p-5">
+            <h3 className="font-semibold text-foreground mb-3">Session Progress</h3>
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm text-muted-foreground">Easy</span>
+              <span className="text-sm font-medium text-foreground">0/42</span>
+            </div>
+            <div className="h-2 bg-input/30 rounded-full mb-4">
+              <div className="h-full bg-green-500 rounded-full" style={{ width: "0%" }} />
+            </div>
+
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm text-muted-foreground">Medium</span>
+              <span className="text-sm font-medium text-foreground">0/104</span>
+            </div>
+            <div className="h-2 bg-input/30 rounded-full mb-4">
+              <div className="h-full bg-yellow-500 rounded-full" style={{ width: "0%" }} />
+            </div>
+
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm text-muted-foreground">Hard</span>
+              <span className="text-sm font-medium text-foreground">0/34</span>
+            </div>
+            <div className="h-2 bg-input/30 rounded-full">
+              <div className="h-full bg-red-500 rounded-full" style={{ width: "0%" }} />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

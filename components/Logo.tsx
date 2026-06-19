@@ -1,40 +1,65 @@
-import { cn } from "@/lib/utils";
+"use client";
+import Image from "next/image";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 
-interface LogoProps {
-  size?: "sm" | "md" | "lg";
-  showText?: boolean;
+export function Logo({
+  className = "",
+  size = "md",
+}: {
   className?: string;
-}
+  size?: "sm" | "md" | "lg";
+}) {
+  const [isDark, setIsDark] = useState(false);
 
-export function Logo({ size = "md", showText = true, className }: LogoProps) {
-  const sizes = {
-    sm: { icon: 24, text: "text-sm" },
-    md: { icon: 32, text: "text-base" },
-    lg: { icon: 48, text: "text-xl" },
+  useEffect(() => {
+    // Check initial state
+    setIsDark(document.documentElement.classList.contains("dark"));
+
+    // Watch for class changes on html element
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.attributeName === "class") {
+          setIsDark(document.documentElement.classList.contains("dark"));
+        }
+      });
+    });
+
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  const dimensions = {
+    sm: { w: 24, h: 24 },
+    md: { w: 32, h: 32 },
+    lg: { w: 48, h: 48 },
   };
-  const s = sizes[size];
+
+  const { w, h } = dimensions[size];
 
   return (
-    <div className={cn("flex items-center gap-2", className)}>
-      <svg
-        width={s.icon}
-        height={s.icon}
-        viewBox="0 0 32 32"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
+    <Link href="/" className={`flex items-center gap-2 ${className}`}>
+      <div className="relative">
+        <Image
+          src={isDark ? "/vericode-logo-mark-white.png" : "/vericode-logo-mark.png"}
+          alt="VeriCode AI Logo"
+          width={w}
+          height={h}
+          className="object-contain"
+          priority
+        />
+      </div>
+      <span
+        className={`font-bold tracking-tight text-foreground ${
+          size === "sm" ? "text-lg" : size === "md" ? "text-xl" : "text-3xl"
+        }`}
       >
-        {/* Geometric network / code verification icon */}
-        <rect x="0" y="0" width="32" height="32" rx="6" fill="currentColor" className="text-foreground" />
-        {/* V shape for Veri */}
-        <path d="M7 8L13 20L16 14L19 20L25 8" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-        {/* Check / tick */}
-        <path d="M10 24L14 28L22 20" stroke="#3b82f6" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-      {showText && (
-        <span className={cn("font-semibold tracking-tight text-foreground", s.text)}>
-          VeriCode <span className="text-blue-600 dark:text-blue-400">AI</span>
-        </span>
-      )}
-    </div>
+        VeriCode <span className="text-brand">AI</span>
+      </span>
+    </Link>
   );
 }

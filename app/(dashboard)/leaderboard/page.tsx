@@ -1,67 +1,61 @@
 "use client";
-// API_KEY: GET /api/leaderboard?period={daily|weekly|monthly|all-time}&type={global|college|company} — returns: LeaderboardEntry[]
-import { useState } from "react";
-import { cn } from "@/lib/utils";
+import { useState, useEffect } from "react";
 import { Medal } from "lucide-react";
 
 const periods = ["Daily", "Weekly", "Monthly", "All Time"];
 const types = ["Global", "College", "Company"];
 
-const entries = [
-  { rank: 1, name: "Arjun Sharma", username: "arjun_s", college: "IIT Bombay", solved: 512, streak: 45, points: 9820, badge: "Master" },
-  { rank: 2, name: "Priya Patel", username: "priya_p", college: "NIT Trichy", solved: 489, streak: 38, points: 9210, badge: "Expert" },
-  { rank: 3, name: "Rohan Gupta", username: "rohan_g", college: "IIT Delhi", solved: 467, streak: 32, points: 8890, badge: "Expert" },
-  { rank: 4, name: "Sneha Kumar", username: "sneha_k", college: "VIT", solved: 445, streak: 28, points: 8450, badge: "Advanced" },
-  { rank: 5, name: "Vikram Singh", username: "vikram_s", college: "IIT Madras", solved: 423, streak: 25, points: 8100, badge: "Advanced" },
-  { rank: 6, name: "Anita Rao", username: "anita_r", college: "BITS Pilani", solved: 401, streak: 22, points: 7760, badge: "Advanced" },
-  { rank: 7, name: "Deepak Nair", username: "deepak_n", college: "IISc", solved: 380, streak: 19, points: 7340, badge: "Intermediate" },
-  { rank: 8, name: "Kavya Menon", username: "kavya_m", college: "NIT Warangal", solved: 358, streak: 16, points: 6990, badge: "Intermediate" },
-  { rank: 9, name: "Rahul Joshi", username: "rahul_j", college: "DTU", solved: 340, streak: 14, points: 6620, badge: "Intermediate" },
-  { rank: 10, name: "Gani Abbu", username: "gani", college: "—", solved: 142, streak: 7, points: 2840, badge: "Beginner", isYou: true },
-];
-
-const medalColors = ["text-yellow-500", "text-gray-400", "text-orange-500"];
-const badgeColor: Record<string, string> = {
-  Master: "bg-purple-100 text-purple-700",
-  Expert: "bg-blue-100 text-blue-700",
-  Advanced: "bg-green-100 text-green-700",
-  Intermediate: "bg-yellow-100 text-yellow-700",
-  Beginner: "bg-gray-100 text-gray-600",
-};
-
 export default function LeaderboardPage() {
-  const [period, setPeriod] = useState("Weekly");
-  const [type, setType] = useState("Global");
+  const [activePeriod, setActivePeriod] = useState("Weekly");
+  const [activeType, setActiveType] = useState("Global");
+  const [userName, setUserName] = useState("Developer");
+
+  useEffect(() => {
+    const data = localStorage.getItem("vericode_user");
+    if (data) {
+      try {
+        const parsed = JSON.parse(data);
+        if (parsed.name) setUserName(parsed.name);
+      } catch (e) {}
+    }
+  }, []);
 
   return (
-    <div className="space-y-5 max-w-4xl">
-      <h1 className="text-xl font-bold text-gray-900">Leaderboard</h1>
+    <div className="max-w-6xl space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+        <div>
+          <h1 className="text-xl font-bold text-foreground">Leaderboard</h1>
+          <p className="text-sm text-muted-foreground mt-0.5">See how you rank against other developers.</p>
+        </div>
+      </div>
 
-      {/* Filters */}
-      <div className="flex flex-wrap gap-3">
-        <div className="flex border border-gray-200 rounded-lg overflow-hidden bg-white">
+      <div className="flex flex-col sm:flex-row gap-4">
+        <div className="flex gap-1 bg-muted/50 p-1 rounded-lg w-fit">
           {periods.map((p) => (
             <button
               key={p}
-              onClick={() => setPeriod(p)}
-              className={cn(
-                "px-3 py-1.5 text-xs font-medium transition-colors",
-                period === p ? "bg-gray-900 text-white" : "text-gray-600 hover:bg-gray-50"
-              )}
+              onClick={() => setActivePeriod(p)}
+              className={`px-4 py-1.5 rounded-md text-sm font-medium transition-all ${
+                activePeriod === p
+                  ? "bg-card text-foreground shadow-sm"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
             >
               {p}
             </button>
           ))}
         </div>
-        <div className="flex border border-gray-200 rounded-lg overflow-hidden bg-white">
+        
+        <div className="flex gap-1 bg-muted/50 p-1 rounded-lg w-fit">
           {types.map((t) => (
             <button
               key={t}
-              onClick={() => setType(t)}
-              className={cn(
-                "px-3 py-1.5 text-xs font-medium transition-colors",
-                type === t ? "bg-gray-900 text-white" : "text-gray-600 hover:bg-gray-50"
-              )}
+              onClick={() => setActiveType(t)}
+              className={`px-4 py-1.5 rounded-md text-sm font-medium transition-all ${
+                activeType === t
+                  ? "bg-foreground text-background shadow-sm"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
             >
               {t}
             </button>
@@ -69,91 +63,67 @@ export default function LeaderboardPage() {
         </div>
       </div>
 
-      {/* Top 3 podium */}
-      <div className="grid grid-cols-3 gap-3">
-        {[entries[1], entries[0], entries[2]].map((e, i) => (
-          <div
-            key={e.rank}
-            className={cn(
-              "flex flex-col items-center bg-white border border-gray-200 rounded-xl p-4 text-center",
-              e.rank === 1 && "border-yellow-300 bg-yellow-50"
-            )}
-          >
-            <div className={cn("w-12 h-12 rounded-full flex items-center justify-center text-lg font-bold text-white mb-2",
-              e.rank === 1 ? "bg-yellow-500" : e.rank === 2 ? "bg-gray-400" : "bg-orange-500"
-            )}>
-              {e.name.charAt(0)}
-            </div>
-            <Medal size={16} className={medalColors[e.rank - 1]} />
-            <p className="text-xs font-semibold text-gray-900 mt-1">{e.name}</p>
-            <p className="text-xs text-gray-400">@{e.username}</p>
-            <p className="text-sm font-bold text-gray-900 mt-2">{e.points.toLocaleString()}</p>
-            <p className="text-[10px] text-gray-400">points</p>
+      {/* Top 3 Podium */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-8">
+        <div className="order-2 md:order-1 flex flex-col items-center bg-card rounded-xl border border-border p-6 mt-8 relative">
+          <div className="absolute -top-6 bg-slate-200 w-12 h-12 rounded-full flex items-center justify-center border-4 border-card text-slate-600 font-bold">2</div>
+          <div className="w-16 h-16 rounded-full bg-slate-700 text-slate-100 flex items-center justify-center text-xl font-bold mb-3 mt-4">
+            P
           </div>
-        ))}
-      </div>
-
-      {/* Full table */}
-      <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
-        <div className="grid grid-cols-[40px_1fr_80px_70px_70px_80px] gap-2 px-4 py-2.5 text-[10px] font-semibold text-gray-400 uppercase tracking-wide border-b border-gray-100">
-          <span className="text-center">#</span>
-          <span>Developer</span>
-          <span className="text-right">Solved</span>
-          <span className="text-right">Streak</span>
-          <span className="text-right">Points</span>
-          <span className="text-right">Badge</span>
+          <h3 className="font-bold text-foreground">Priya Patel</h3>
+          <p className="text-xs text-muted-foreground">@priya_p</p>
+          <div className="mt-3 text-lg font-bold text-brand">9,210 <span className="text-xs font-normal text-muted-foreground">pts</span></div>
         </div>
-        <div className="divide-y divide-gray-50">
-          {entries.map((e) => (
-            <div
-              key={e.rank}
-              className={cn(
-                "grid grid-cols-[40px_1fr_80px_70px_70px_80px] gap-2 items-center px-4 py-3 transition-colors hover:bg-gray-50",
-                e.isYou && "bg-blue-50 hover:bg-blue-50"
-              )}
-            >
-              <div className="text-center">
-                {e.rank <= 3 ? (
-                  <Medal size={16} className={medalColors[e.rank - 1]} />
-                ) : (
-                  <span className="text-sm font-medium text-gray-500">{e.rank}</span>
-                )}
-              </div>
-              <div className="flex items-center gap-2.5 min-w-0">
-                <div className={cn("w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white shrink-0",
-                  e.isYou ? "bg-blue-600" : "bg-gray-600"
-                )}>
-                  {e.name.charAt(0)}
-                </div>
-                <div className="min-w-0">
-                  <p className="text-sm font-medium text-gray-900 truncate">
-                    {e.name} {e.isYou && <span className="text-xs text-blue-600 font-normal">(you)</span>}
-                  </p>
-                  <p className="text-xs text-gray-400 truncate">@{e.username}</p>
-                </div>
-              </div>
-              <div className="text-right text-sm font-medium text-gray-700">{e.solved}</div>
-              <div className="text-right text-sm text-gray-600">{e.streak}d</div>
-              <div className="text-right text-sm font-semibold text-gray-900">{e.points.toLocaleString()}</div>
-              <div className="flex justify-end">
-                <span className={cn("text-[10px] font-semibold px-2 py-0.5 rounded-full", badgeColor[e.badge])}>
-                  {e.badge}
-                </span>
-              </div>
-            </div>
-          ))}
+        
+        <div className="order-1 md:order-2 flex flex-col items-center bg-brand/5 rounded-xl border border-brand/20 p-6 relative">
+          <div className="absolute -top-6 bg-yellow-400 w-14 h-14 rounded-full flex items-center justify-center border-4 border-card shadow-lg text-yellow-900 font-bold">1</div>
+          <Medal className="absolute top-4 right-4 text-yellow-500 w-6 h-6" />
+          <div className="w-20 h-20 rounded-full bg-yellow-500 text-yellow-900 flex items-center justify-center text-2xl font-bold mb-3 mt-4">
+            A
+          </div>
+          <h3 className="font-bold text-foreground text-lg">Arjun Sharma</h3>
+          <p className="text-xs text-muted-foreground">@arjun_s</p>
+          <div className="mt-3 text-xl font-bold text-brand">9,820 <span className="text-xs font-normal text-muted-foreground">pts</span></div>
+        </div>
+
+        <div className="order-3 md:order-3 flex flex-col items-center bg-card rounded-xl border border-border p-6 mt-12 relative">
+          <div className="absolute -top-6 bg-amber-600 w-10 h-10 rounded-full flex items-center justify-center border-4 border-card text-amber-50 font-bold">3</div>
+          <div className="w-14 h-14 rounded-full bg-amber-700 text-amber-50 flex items-center justify-center text-lg font-bold mb-3 mt-2">
+            R
+          </div>
+          <h3 className="font-bold text-foreground">Rohan Gupta</h3>
+          <p className="text-xs text-muted-foreground">@rohan_g</p>
+          <div className="mt-3 text-base font-bold text-brand">8,890 <span className="text-xs font-normal text-muted-foreground">pts</span></div>
         </div>
       </div>
 
-      {/* Points info */}
-      <div className="bg-white border border-gray-200 rounded-xl p-4">
-        <h3 className="text-xs font-semibold text-gray-700 mb-3">How points are calculated</h3>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs text-gray-500">
-          <div className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-green-400 shrink-0" />Easy: 10 pts</div>
-          <div className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-yellow-400 shrink-0" />Medium: 25 pts</div>
-          <div className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-red-400 shrink-0" />Hard: 50 pts</div>
-          <div className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-blue-400 shrink-0" />Daily streak: 5 pts</div>
-        </div>
+      <div className="bg-card rounded-xl border border-border overflow-hidden">
+        <table className="min-w-full divide-y divide-border">
+          <thead className="bg-muted/30">
+            <tr>
+              <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider w-16">#</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Developer</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Points</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-border">
+            <tr className="bg-brand/5 border-l-4 border-l-brand">
+              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-muted-foreground">-</td>
+              <td className="px-6 py-4 whitespace-nowrap">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-brand text-brand-foreground flex items-center justify-center text-xs font-bold">
+                    {userName.charAt(0).toUpperCase()}
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-sm font-bold text-foreground">{userName} (You)</span>
+                    <span className="text-xs text-muted-foreground">Unranked</span>
+                  </div>
+                </div>
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-foreground">0</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   );

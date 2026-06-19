@@ -1,19 +1,27 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   --background: #ffffff;
   --foreground: #0a0a0a;
   --card: #ffffff;
+  --card-foreground: #0a0a0a;
   --muted: #f5f5f7;
   --muted-foreground: #6e6e80;
   --border: #e4e4e7;
+  --input: #e4e4e7;
   --primary: #0a0a0a;
   --primary-foreground: #fafafa;
   --secondary: #f4f4f5;
+  --secondary-foreground: #0a0a0a;
   --brand: #2563eb;
+  --brand-foreground: #ffffff;
   --brand-light: #eff6ff;
+  --brand-text: #1d4ed8;
   --sidebar-bg: #fafaf9;
   --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
   --radius: 0.5rem;
 }
 
@@ -21,31 +29,58 @@
   --background: #0a0a0a;
   --foreground: #fafafa;
   --card: #111111;
+  --card-foreground: #fafafa;
   --muted: #1c1c1e;
   --muted-foreground: #8e8ea0;
   --border: #27272a;
+  --input: #27272a;
   --primary: #fafafa;
   --primary-foreground: #0a0a0a;
   --secondary: #27272a;
+  --secondary-foreground: #fafafa;
   --brand: #3b82f6;
-  --brand-light: #1e3a5f20;
+  --brand-foreground: #ffffff;
+  --brand-light: rgba(59, 130, 246, 0.15);
+  --brand-text: #60a5fa;
   --sidebar-bg: #111111;
+  --destructive: #7f1d1d;
+  --destructive-foreground: #fca5a5;
 }
 
-@theme inline {
+@theme {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-brand: var(--brand);
+  --color-brand-foreground: var(--brand-foreground);
+  --color-brand-light: var(--brand-light);
+  --color-brand-text: var(--brand-text);
+  --color-sidebar-bg: var(--sidebar-bg);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
 }
 
 * { box-sizing: border-box; }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
-.scrollbar-thin::-webkit-scrollbar { width: 4px; }
+.scrollbar-thin::-webkit-scrollbar { width: 4px; height: 4px; }
 .scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
 .scrollbar-thin::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }

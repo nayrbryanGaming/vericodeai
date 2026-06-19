@@ -1,159 +1,155 @@
 "use client";
-// API_KEY: GET /api/analytics — returns: { projectsDownloaded, practiceProgress, contributions[], languageBreakdown[] }
 import { cn } from "@/lib/utils";
-import { FolderOpen, Code2 } from "lucide-react";
+import { Code2 } from "lucide-react";
+import { useEffect, useState } from "react";
 
 const contributionData = (() => {
   const weeks: Array<Array<{ count: number }>> = [];
   for (let w = 0; w < 52; w++) {
     const days = [];
     for (let d = 0; d < 7; d++) {
-      const r = Math.random();
-      days.push({ count: r < 0.6 ? 0 : r < 0.75 ? 1 : r < 0.88 ? 2 : r < 0.95 ? 3 : 4 });
+      days.push({ count: 0 }); // Zeroed out
     }
     weeks.push(days);
   }
-  // set some specific active days for demo
-  weeks[50][1] = { count: 3 };
-  weeks[51][3] = { count: 4 };
   return weeks;
 })();
 
-const months = ["Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan", "Feb", "Mar", "Apr", "May"];
-const days = ["Mon", "", "Wed", "", "Fri"];
-
-const countColor = ["bg-gray-100", "bg-green-200", "bg-green-400", "bg-green-600", "bg-green-800"];
-
-const languageData = [
-  { lang: "python", count: 0 },
-];
-
 export default function AnalyticsPage() {
-  const totalContributions = contributionData.flat().filter((d) => d.count > 0).length;
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   return (
-    <div className="space-y-6 max-w-5xl">
-      <h1 className="text-xl font-bold text-gray-900">Project Analytics</h1>
-
-      {/* Projects Made By You */}
-      <div className="bg-white border border-gray-200 rounded-xl p-5">
-        <div className="flex items-center gap-1.5 mb-1">
-          <span className="text-[10px] font-semibold text-blue-600 tracking-widest uppercase">Workspace Overview</span>
-        </div>
-        <h2 className="text-base font-semibold text-gray-900 mb-4">Projects Made By You</h2>
-        <div className="border border-gray-200 rounded-lg py-12 flex flex-col items-center justify-center text-center">
-          <Code2 size={32} className="text-gray-300 mb-3" />
-          <p className="text-sm font-medium text-gray-500">No downloaded projects yet</p>
-          <p className="text-xs text-gray-400 mt-1 mb-4">Browse the Projects gallery and download a template — your downloaded projects will appear here.</p>
-          <a href="/projects" className="px-4 py-2 bg-blue-600 text-white text-xs font-semibold rounded-lg hover:bg-blue-500 transition-colors">
-            Browse Projects
-          </a>
-        </div>
+    <div className="max-w-6xl space-y-6">
+      <div>
+        <h1 className="text-xl font-bold text-foreground">Analytics</h1>
+        <p className="text-sm text-muted-foreground mt-0.5">Track your coding journey and problem-solving patterns.</p>
       </div>
 
-      {/* Practice Progress */}
-      <div className="bg-white border border-gray-200 rounded-xl p-5">
-        <div className="flex items-center gap-1.5 mb-1">
-          <span className="text-[10px] font-semibold text-blue-600 tracking-widest uppercase">Practice Progress</span>
-        </div>
-        <h2 className="text-base font-semibold text-gray-900 mb-4">Problems Solved</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="flex items-start gap-5">
-            {/* Circular progress */}
-            <div className="relative w-24 h-24 shrink-0">
-              <svg className="w-24 h-24 -rotate-90" viewBox="0 0 80 80">
-                <circle cx="40" cy="40" r="32" fill="none" stroke="#e5e7eb" strokeWidth="8" />
-                <circle
-                  cx="40" cy="40" r="32" fill="none"
-                  stroke="#22c55e" strokeWidth="8"
-                  strokeDasharray="0 201"
-                  strokeLinecap="round"
-                />
-              </svg>
-              <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <span className="text-lg font-bold text-gray-900">0%</span>
-                <span className="text-[9px] text-gray-400 uppercase tracking-wide">Complete</span>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+        <div className="lg:col-span-2 space-y-5">
+          <div className="bg-card rounded-xl border border-border p-5">
+            <h2 className="text-sm font-semibold text-foreground mb-4">Activity Heatmap</h2>
+            <div className="flex justify-between items-end mb-6">
+              <div>
+                <div className="text-2xl font-bold text-foreground">0</div>
+                <div className="text-sm text-muted-foreground">submissions in the past year</div>
+              </div>
+              <div className="text-sm text-muted-foreground">
+                Max streak: <span className="font-semibold text-foreground">0 days</span>
               </div>
             </div>
-            <div>
-              <div className="text-xs text-gray-400 uppercase tracking-wide mb-1">Questions Solved</div>
-              <div className="text-2xl font-bold text-gray-900">0 <span className="text-base font-normal text-gray-400">/ 1</span></div>
-              <div className="mt-3">
-                <div className="text-xs text-gray-400 uppercase tracking-wide mb-2">By Language</div>
-                {languageData.map((l) => (
-                  <div key={l.lang} className="flex items-center gap-2">
-                    <span className="text-xs text-gray-600 font-mono">{l.lang} ({l.count})</span>
+
+            <div className="overflow-x-auto pb-4 scrollbar-thin">
+              <div className="flex gap-1 min-w-max">
+                {contributionData.map((week, i) => (
+                  <div key={i} className="flex flex-col gap-1">
+                    {week.map((day, j) => (
+                      <div
+                        key={j}
+                        className={cn(
+                          "w-3 h-3 rounded-sm",
+                          "bg-input/20 border border-input/30"
+                        )}
+                        title={`0 submissions`}
+                      />
+                    ))}
                   </div>
                 ))}
               </div>
             </div>
+            <div className="mt-4 flex items-center gap-2 text-xs text-muted-foreground justify-end">
+              <span>Less</span>
+              <div className="w-3 h-3 rounded-sm bg-input/20 border border-input/30" />
+              <div className="w-3 h-3 rounded-sm bg-brand-light" />
+              <div className="w-3 h-3 rounded-sm bg-brand opacity-60" />
+              <div className="w-3 h-3 rounded-sm bg-brand opacity-80" />
+              <div className="w-3 h-3 rounded-sm bg-brand text-brand-foreground" />
+              <span>More</span>
+            </div>
           </div>
-          <div className="flex flex-col gap-3">
-            {[
-              { label: "Easy", solved: 0, total: 0, color: "bg-green-400" },
-              { label: "Medium", solved: 0, total: 1, color: "bg-yellow-400" },
-              { label: "Hard", solved: 0, total: 0, color: "bg-red-400" },
-            ].map((d) => (
-              <div key={d.label}>
-                <div className="flex justify-between text-xs text-gray-500 mb-1">
-                  <span>{d.label}</span>
-                  <span>{d.solved}/{d.total}</span>
+
+          <div className="grid grid-cols-2 gap-5">
+            <div className="bg-card rounded-xl border border-border p-5">
+              <h2 className="text-sm font-semibold text-foreground mb-4">Difficulty Distribution</h2>
+              <div className="flex gap-8 items-center">
+                <div className="relative w-24 h-24 shrink-0">
+                  <svg className="w-24 h-24 -rotate-90" viewBox="0 0 36 36">
+                    <circle cx="18" cy="18" r="15" fill="none" stroke="currentColor" className="text-input/30" strokeWidth="4" />
+                  </svg>
+                  <div className="absolute inset-0 flex flex-col items-center justify-center">
+                    <span className="text-xl font-bold text-foreground">0</span>
+                    <span className="text-[10px] text-muted-foreground uppercase">Solved</span>
+                  </div>
                 </div>
-                <div className="h-1.5 bg-gray-100 rounded-full">
-                  <div
-                    className={cn("h-full rounded-full", d.color)}
-                    style={{ width: d.total > 0 ? `${(d.solved / d.total) * 100}%` : "0%" }}
-                  />
+                <div className="flex-1 space-y-3">
+                  <div>
+                    <div className="flex justify-between text-xs mb-1">
+                      <span className="text-green-500 font-medium">Easy</span>
+                      <span className="text-foreground">0 <span className="text-muted-foreground">/ 142</span></span>
+                    </div>
+                    <div className="h-1.5 bg-input/30 rounded-full"></div>
+                  </div>
+                  <div>
+                    <div className="flex justify-between text-xs mb-1">
+                      <span className="text-yellow-500 font-medium">Medium</span>
+                      <span className="text-foreground">0 <span className="text-muted-foreground">/ 250</span></span>
+                    </div>
+                    <div className="h-1.5 bg-input/30 rounded-full"></div>
+                  </div>
+                  <div>
+                    <div className="flex justify-between text-xs mb-1">
+                      <span className="text-red-500 font-medium">Hard</span>
+                      <span className="text-foreground">0 <span className="text-muted-foreground">/ 86</span></span>
+                    </div>
+                    <div className="h-1.5 bg-input/30 rounded-full"></div>
+                  </div>
                 </div>
               </div>
-            ))}
+            </div>
+
+            <div className="bg-card rounded-xl border border-border p-5">
+              <h2 className="text-sm font-semibold text-foreground mb-4">Acceptance Rate</h2>
+              <div className="flex items-end justify-between">
+                <div>
+                  <div className="text-3xl font-bold text-foreground mb-1">0%</div>
+                  <div className="text-sm text-muted-foreground">0 / 0 submissions</div>
+                </div>
+                <Code2 className="w-10 h-10 text-input/50" />
+              </div>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Contribution Graph */}
-      <div className="bg-white border border-gray-200 rounded-xl p-5">
-        <h2 className="text-sm font-semibold text-gray-900 mb-1">
-          {totalContributions} contributions in 2026
-        </h2>
-        <div className="overflow-x-auto">
-          <div className="min-w-max">
-            {/* Month labels */}
-            <div className="flex gap-1 mb-1 ml-8">
-              {months.map((m, i) => (
-                <div key={i} className="text-[10px] text-gray-400" style={{ width: `${(52 / 12) * 11}px` }}>
-                  {m}
-                </div>
+        <div className="space-y-5">
+          <div className="bg-card rounded-xl border border-border p-5">
+            <h2 className="text-sm font-semibold text-foreground mb-4">Recent Skills</h2>
+            <div className="flex flex-wrap gap-2">
+              {["Arrays", "Hash Table", "Strings"].map((skill) => (
+                <span key={skill} className="px-3 py-1 bg-muted text-foreground text-xs font-medium rounded-lg border border-border">
+                  {skill}
+                </span>
               ))}
             </div>
-            <div className="flex gap-1">
-              {/* Day labels */}
-              <div className="flex flex-col gap-0.5 mr-1">
-                {days.map((d, i) => (
-                  <div key={i} className="text-[10px] text-gray-400 h-2.5 flex items-center" style={{ height: "11px" }}>
-                    {d}
-                  </div>
-                ))}
+          </div>
+
+          <div className="bg-card rounded-xl border border-border p-5">
+            <h2 className="text-sm font-semibold text-foreground mb-4">Language Stats</h2>
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="w-2.5 h-2.5 rounded-full bg-blue-500" />
+                  <span className="text-sm text-foreground">Python</span>
+                </div>
+                <span className="text-sm font-medium text-foreground">0 <span className="text-muted-foreground font-normal">probs</span></span>
               </div>
-              {/* Grid */}
-              {contributionData.map((week, wi) => (
-                <div key={wi} className="flex flex-col gap-0.5">
-                  {week.map((day, di) => (
-                    <div
-                      key={di}
-                      title={`${day.count} contribution${day.count !== 1 ? "s" : ""}`}
-                      className={cn("w-2.5 h-2.5 rounded-sm cursor-pointer hover:ring-1 hover:ring-gray-400", countColor[day.count])}
-                    />
-                  ))}
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="w-2.5 h-2.5 rounded-full bg-yellow-500" />
+                  <span className="text-sm text-foreground">JavaScript</span>
                 </div>
-              ))}
-            </div>
-            <div className="flex items-center gap-1.5 mt-2 justify-end">
-              <span className="text-[10px] text-gray-400">Less</span>
-              {countColor.map((c, i) => (
-                <div key={i} className={cn("w-2.5 h-2.5 rounded-sm", c)} />
-              ))}
-              <span className="text-[10px] text-gray-400">More</span>
+                <span className="text-sm font-medium text-foreground">0 <span className="text-muted-foreground font-normal">probs</span></span>
+              </div>
             </div>
           </div>
         </div>

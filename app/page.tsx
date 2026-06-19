@@ -1,284 +1,196 @@
 import Link from "next/link";
+import { ArrowRight, Code2, BrainCircuit, Users, Target, CheckCircle2, ChevronRight, Github } from "lucide-react";
 import { Logo } from "@/components/Logo";
-import {
-  CheckCircle,
-  Code2,
-  Brain,
-  Trophy,
-  BookOpen,
-  BarChart3,
-  Users,
-  ArrowRight,
-  Zap,
-  Shield,
-} from "lucide-react";
-
-const features = [
-  {
-    icon: Brain,
-    title: "AI Assistance",
-    desc: "Debug errors, explain code, generate solutions, and get project guidance powered by AI.",
-  },
-  {
-    icon: Code2,
-    title: "Practice Problems",
-    desc: "Company-wise coding questions from Google, Amazon, Microsoft, and 50+ top companies.",
-  },
-  {
-    icon: BookOpen,
-    title: "Structured Learning",
-    desc: "Curated resources from GeeksforGeeks, W3Schools, and YouTube for every skill level.",
-  },
-  {
-    icon: BarChart3,
-    title: "Progress Analytics",
-    desc: "Track your growth with contribution graphs, language-wise stats, and topic breakdowns.",
-  },
-  {
-    icon: Trophy,
-    title: "Leaderboard & Badges",
-    desc: "Compete with peers, earn badges for milestones, and climb the global leaderboard.",
-  },
-  {
-    icon: Users,
-    title: "Project Ideas",
-    desc: "Explore beginner to advanced project templates and generate academic documentation.",
-  },
-];
-
-const plans = [
-  {
-    name: "Free",
-    price: "$0",
-    period: "forever",
-    features: ["50 AI queries/month", "100 practice problems", "Basic analytics", "Community access"],
-    cta: "Get started",
-    highlight: false,
-  },
-  {
-    name: "Pro",
-    price: "$12",
-    period: "per month",
-    features: [
-      "Unlimited AI queries",
-      "All practice problems",
-      "Advanced analytics",
-      "Company-wise filters",
-      "Badge system",
-      "Leaderboard ranking",
-    ],
-    cta: "Start free trial",
-    highlight: true,
-  },
-  {
-    name: "Team",
-    price: "$49",
-    period: "per month",
-    features: [
-      "Everything in Pro",
-      "Up to 10 members",
-      "Team leaderboard",
-      "Admin dashboard",
-      "Priority support",
-    ],
-    cta: "Contact sales",
-    highlight: false,
-  },
-];
-
-const stats = [
-  { value: "50K+", label: "Developers" },
-  { value: "5,000+", label: "Problems" },
-  { value: "100+", label: "Companies" },
-  { value: "98%", label: "Satisfaction" },
-];
 
 export default function LandingPage() {
   return (
-    <div className="flex flex-col min-h-screen bg-white text-gray-900">
-      {/* Navbar */}
-      <header className="sticky top-0 z-50 border-b border-gray-200 bg-white/80 backdrop-blur-md">
-        <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
-          <Logo size="sm" />
-          <div className="hidden md:flex items-center gap-8 text-sm font-medium text-gray-500">
-            <a href="#features" className="hover:text-gray-900 transition-colors">Features</a>
-            <a href="#pricing" className="hover:text-gray-900 transition-colors">Pricing</a>
-            <a href="#about" className="hover:text-gray-900 transition-colors">About</a>
-          </div>
-          <div className="flex items-center gap-3">
-            <Link href="/login" className="text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors px-3 py-1.5">
-              Sign in
-            </Link>
-            <Link href="/signup" className="text-sm font-semibold bg-gray-900 text-white px-4 py-1.5 rounded-md hover:bg-gray-700 transition-colors">
-              Get started
-            </Link>
-          </div>
-        </nav>
-      </header>
-
-      {/* Hero */}
-      <section className="flex flex-col items-center justify-center text-center px-4 pt-24 pb-20 bg-gradient-to-b from-blue-50/60 to-white">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-blue-200 bg-blue-50 text-blue-700 text-xs font-medium mb-6">
-          <Zap size={12} />
-          AI-Powered Developer Platform
-        </div>
-        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-gray-900 max-w-4xl leading-tight">
-          Code smarter. Learn faster.{" "}
-          <span className="text-blue-600">Get hired.</span>
-        </h1>
-        <p className="mt-5 text-lg sm:text-xl text-gray-500 max-w-2xl leading-relaxed">
-          VeriCode AI combines AI assistance, coding practice, structured learning, and progress
-          analytics into one platform built for developers at every stage.
-        </p>
-        <div className="mt-8 flex flex-col sm:flex-row items-center gap-3">
-          <Link
-            href="/signup"
-            className="inline-flex items-center gap-2 bg-gray-900 text-white font-semibold px-6 py-3 rounded-lg hover:bg-gray-700 transition-colors text-sm"
-          >
-            Start for free <ArrowRight size={15} />
-          </Link>
-          <Link
-            href="/dashboard"
-            className="inline-flex items-center gap-2 text-sm font-medium text-gray-700 px-6 py-3 rounded-lg border border-gray-300 hover:border-gray-400 transition-colors"
-          >
-            View dashboard demo
-          </Link>
-        </div>
-        <p className="mt-4 text-xs text-gray-400">No credit card required</p>
-      </section>
-
-      {/* Stats */}
-      <section className="border-y border-gray-200 bg-white py-12">
-        <div className="max-w-5xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-          {stats.map((s) => (
-            <div key={s.label}>
-              <div className="text-3xl font-bold text-gray-900">{s.value}</div>
-              <div className="text-sm text-gray-500 mt-1">{s.label}</div>
+    <div className="min-h-screen bg-background selection:bg-brand/20">
+      {/* Navigation */}
+      <nav className="fixed w-full top-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <Logo />
+            <div className="hidden md:flex items-center gap-8">
+              <Link href="#features" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Features</Link>
+              <Link href="#curriculum" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Curriculum</Link>
+              <Link href="#testimonials" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Success Stories</Link>
             </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Features */}
-      <section id="features" className="py-20 px-4 bg-gray-50">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-14">
-            <h2 className="text-3xl font-bold text-gray-900">Everything you need to grow</h2>
-            <p className="mt-3 text-gray-500 max-w-xl mx-auto">
-              A complete toolkit for developers to learn, practice, and get hired — all in one place.
-            </p>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {features.map((f) => (
-              <div
-                key={f.title}
-                className="p-6 rounded-xl border border-gray-200 bg-white hover:shadow-md transition-shadow"
+            <div className="flex items-center gap-4">
+              <Link href="/login" className="text-sm font-medium text-foreground hover:text-brand transition-colors">
+                Sign in
+              </Link>
+              <Link 
+                href="/signup" 
+                className="inline-flex items-center justify-center rounded-lg bg-brand px-4 py-2 text-sm font-medium text-brand-foreground hover:bg-brand-text transition-colors shadow-sm"
               >
-                <div className="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center mb-4">
-                  <f.icon size={20} className="text-blue-600" />
-                </div>
-                <h3 className="font-semibold text-gray-900 mb-2">{f.title}</h3>
-                <p className="text-sm text-gray-500 leading-relaxed">{f.desc}</p>
+                Get Started
+              </Link>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      <main>
+        {/* Hero Section */}
+        <div className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-brand-light/50 via-background to-background" />
+          
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+            <div className="text-center max-w-4xl mx-auto">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-light text-brand-text text-sm font-medium mb-8 border border-brand/20">
+                <span className="flex h-2 w-2 rounded-full bg-brand animate-pulse"></span>
+                Now with AI-powered mock interviews
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Company trust bar */}
-      <section id="about" className="py-14 px-4 bg-white">
-        <div className="max-w-5xl mx-auto text-center">
-          <p className="text-xs font-medium text-gray-400 uppercase tracking-widest mb-6">
-            Practice questions from top companies
-          </p>
-          <div className="flex flex-wrap justify-center gap-4">
-            {["Google", "Amazon", "Microsoft", "TCS", "Infosys", "Adobe", "Meta", "Zoho", "Accenture", "Wipro"].map((c) => (
-              <span key={c} className="text-sm font-medium text-gray-400 px-3 py-1 border border-gray-200 rounded-full">
-                {c}
-              </span>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Pricing */}
-      <section id="pricing" className="py-20 px-4 bg-gray-50">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-14">
-            <h2 className="text-3xl font-bold text-gray-900">Simple, transparent pricing</h2>
-            <p className="mt-3 text-gray-500">Start free. Upgrade when you are ready.</p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {plans.map((p) => (
-              <div
-                key={p.name}
-                className={`rounded-xl border p-6 flex flex-col ${
-                  p.highlight
-                    ? "border-blue-600 bg-blue-600 text-white"
-                    : "border-gray-200 bg-white"
-                }`}
-              >
-                <div className="mb-4">
-                  <div className={`text-sm font-medium mb-1 ${p.highlight ? "text-blue-100" : "text-gray-500"}`}>
-                    {p.name}
-                  </div>
-                  <div className={`text-3xl font-bold ${p.highlight ? "text-white" : "text-gray-900"}`}>
-                    {p.price}
-                    <span className={`text-sm font-normal ml-1 ${p.highlight ? "text-blue-100" : "text-gray-400"}`}>
-                      /{p.period}
-                    </span>
-                  </div>
-                </div>
-                <ul className="flex-1 space-y-2.5 mb-6">
-                  {p.features.map((f) => (
-                    <li key={f} className="flex items-center gap-2 text-sm">
-                      <CheckCircle size={14} className={p.highlight ? "text-blue-200" : "text-green-500"} />
-                      <span className={p.highlight ? "text-blue-50" : "text-gray-600"}>{f}</span>
-                    </li>
-                  ))}
-                </ul>
-                <Link
-                  href="/signup"
-                  className={`text-center text-sm font-semibold px-4 py-2.5 rounded-lg transition-colors ${
-                    p.highlight
-                      ? "bg-white text-blue-600 hover:bg-blue-50"
-                      : "bg-gray-900 text-white hover:bg-gray-700"
-                  }`}
+              <h1 className="text-5xl lg:text-7xl font-bold tracking-tight text-foreground mb-6">
+                Master Coding Interviews with <span className="text-brand">AI</span>
+              </h1>
+              <p className="text-xl text-muted-foreground mb-10 max-w-2xl mx-auto leading-relaxed">
+                Your personal AI mentor for data structures, algorithms, and system design. Practice, get instant feedback, and land your dream role at top tech companies.
+              </p>
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <Link 
+                  href="/signup" 
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl bg-brand px-8 py-4 text-base font-bold text-brand-foreground hover:bg-brand-text transition-all shadow-lg shadow-brand/25 hover:shadow-brand/40 hover:-translate-y-0.5"
                 >
-                  {p.cta}
+                  Start Practicing for Free
+                  <ArrowRight className="w-5 h-5" />
+                </Link>
+                <Link 
+                  href="#curriculum" 
+                  className="w-full sm:w-auto inline-flex items-center justify-center rounded-xl bg-card border border-border px-8 py-4 text-base font-medium text-foreground hover:bg-muted transition-all"
+                >
+                  View Curriculum
                 </Link>
               </div>
-            ))}
+            </div>
+
+            {/* Dashboard Preview Image */}
+            <div className="mt-20 relative mx-auto max-w-5xl">
+              <div className="rounded-2xl border border-border/50 bg-card/50 p-2 backdrop-blur-sm shadow-2xl">
+                <div className="rounded-xl overflow-hidden border border-border bg-background shadow-sm aspect-[16/9] flex flex-col">
+                  {/* Fake browser header */}
+                  <div className="h-12 border-b border-border bg-muted/50 flex items-center px-4 gap-2">
+                    <div className="flex gap-1.5">
+                      <div className="w-3 h-3 rounded-full bg-red-400" />
+                      <div className="w-3 h-3 rounded-full bg-yellow-400" />
+                      <div className="w-3 h-3 rounded-full bg-green-400" />
+                    </div>
+                    <div className="ml-4 flex-1 max-w-xl mx-auto bg-card rounded-md border border-border h-7 flex items-center px-3 text-xs text-muted-foreground">
+                      vericode-ai.com/dashboard
+                    </div>
+                  </div>
+                  {/* Fake dashboard content */}
+                  <div className="flex-1 p-6 grid grid-cols-4 gap-6 bg-background">
+                    <div className="col-span-1 space-y-4">
+                      <div className="h-8 w-32 bg-muted rounded-md" />
+                      <div className="space-y-2 pt-4">
+                        {[...Array(5)].map((_, i) => (
+                          <div key={i} className="h-10 bg-muted/50 rounded-lg w-full" />
+                        ))}
+                      </div>
+                    </div>
+                    <div className="col-span-3 space-y-6">
+                      <div className="flex gap-4">
+                        {[...Array(3)].map((_, i) => (
+                          <div key={i} className="h-24 bg-card border border-border rounded-xl flex-1 p-4 flex flex-col justify-between">
+                            <div className="w-8 h-8 rounded-full bg-brand-light" />
+                            <div className="h-4 w-16 bg-muted rounded" />
+                          </div>
+                        ))}
+                      </div>
+                      <div className="h-64 bg-card border border-border rounded-xl p-6">
+                        <div className="h-6 w-48 bg-muted rounded mb-6" />
+                        <div className="space-y-3">
+                          {[...Array(4)].map((_, i) => (
+                            <div key={i} className="h-12 bg-muted/30 rounded-lg w-full" />
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Decorative elements */}
+              <div className="absolute -left-12 top-1/4 w-24 h-24 bg-blue-500/10 rounded-full blur-2xl" />
+              <div className="absolute -right-12 bottom-1/4 w-32 h-32 bg-purple-500/10 rounded-full blur-2xl" />
+            </div>
           </div>
         </div>
-      </section>
 
-      {/* CTA */}
-      <section className="py-20 px-4 bg-gray-900 text-white text-center">
-        <div className="max-w-2xl mx-auto">
-          <Shield size={32} className="mx-auto mb-4 text-blue-400" />
-          <h2 className="text-3xl font-bold mb-3">Ready to level up your coding?</h2>
-          <p className="text-gray-400 mb-8">
-            Join thousands of developers who use VeriCode AI to practice, learn, and land their dream job.
-          </p>
-          <Link
-            href="/signup"
-            className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-semibold px-8 py-3 rounded-lg transition-colors text-sm"
-          >
-            Get started for free <ArrowRight size={15} />
-          </Link>
+        {/* Features Section */}
+        <div id="features" className="py-24 bg-muted/30 border-y border-border">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center max-w-3xl mx-auto mb-16">
+              <h2 className="text-brand font-semibold tracking-wide uppercase text-sm mb-3">Why VeriCode AI?</h2>
+              <p className="text-3xl font-bold text-foreground sm:text-4xl">Everything you need to ace your next technical interview</p>
+            </div>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {[
+                {
+                  icon: Code2,
+                  title: "150+ Curated Problems",
+                  desc: "Hand-picked data structure and algorithm questions commonly asked at FAANG and top tech companies.",
+                  color: "text-blue-500",
+                  bg: "bg-blue-500/10"
+                },
+                {
+                  icon: BrainCircuit,
+                  title: "AI Code Reviewer",
+                  desc: "Get instant, detailed feedback on your code's time/space complexity, bugs, and best practices.",
+                  color: "text-purple-500",
+                  bg: "bg-purple-500/10"
+                },
+                {
+                  icon: Target,
+                  title: "Guided Learning Paths",
+                  desc: "Structured curriculum from beginner to advanced. Master one pattern at a time.",
+                  color: "text-brand",
+                  bg: "bg-brand/10"
+                }
+              ].map((f, i) => (
+                <div key={i} className="bg-card rounded-2xl p-8 border border-border shadow-sm hover:shadow-md transition-shadow">
+                  <div className={`w-12 h-12 rounded-xl ${f.bg} flex items-center justify-center mb-6`}>
+                    <f.icon className={`w-6 h-6 ${f.color}`} />
+                  </div>
+                  <h3 className="text-xl font-bold text-foreground mb-3">{f.title}</h3>
+                  <p className="text-muted-foreground leading-relaxed">{f.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
-      </section>
+
+        {/* CTA Section */}
+        <div className="py-24 bg-background">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-6">Ready to start your journey?</h2>
+            <p className="text-lg text-muted-foreground mb-10">Join thousands of developers who have leveled up their coding skills and landed their dream jobs.</p>
+            <Link 
+              href="/signup" 
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-foreground px-8 py-4 text-base font-bold text-background hover:bg-foreground/90 transition-all shadow-lg"
+            >
+              Create Free Account
+              <ArrowRight className="w-5 h-5" />
+            </Link>
+          </div>
+        </div>
+      </main>
 
       {/* Footer */}
-      <footer className="border-t border-gray-200 bg-white py-10 px-4">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-          <Logo size="sm" />
-          <p className="text-xs text-gray-400">2026 VeriCode AI. All rights reserved.</p>
-          <div className="flex items-center gap-6 text-xs text-gray-400">
-            <a href="#" className="hover:text-gray-600">Privacy</a>
-            <a href="#" className="hover:text-gray-600">Terms</a>
-            <a href="#" className="hover:text-gray-600">Contact</a>
+      <footer className="bg-card border-t border-border py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
+          <div className="flex items-center gap-2">
+            <Logo size="sm" />
+          </div>
+          <p className="text-sm text-muted-foreground">
+            © {new Date().getFullYear()} VeriCode AI. All rights reserved.
+          </p>
+          <div className="flex items-center gap-4">
+            <Link href="#" className="text-muted-foreground hover:text-foreground">
+              <Github className="w-5 h-5" />
+            </Link>
           </div>
         </div>
       </footer>
