@@ -3,6 +3,18 @@
 import { useEffect, useState } from "react";
 import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { CodeEditor, noop } from "@/components/CodeEditor";
+
+const PREVIEW_CODE = `// Live preview — your editor theme & font size
+function twoSum(nums, target) {
+  const seen = new Map();
+  for (let i = 0; i < nums.length; i++) {
+    const need = target - nums[i];
+    if (seen.has(need)) return [seen.get(need), i];
+    seen.set(nums[i], i);
+  }
+  return [];
+}`;
 
 const themes = [
   { id: "light", label: "Light", preview: "bg-white border-zinc-200" },
@@ -137,6 +149,20 @@ export default function AppearancePage() {
                   {f}
                 </button>
               ))}
+            </div>
+          </div>
+
+          {/* Live preview — reflects the selected theme + font size instantly */}
+          <div>
+            <label className="block text-sm font-medium text-foreground mb-2">Preview</label>
+            <div className="h-44 rounded-lg overflow-hidden border border-border">
+              <CodeEditor
+                value={PREVIEW_CODE}
+                onChange={noop}
+                language="javascript"
+                editorTheme={editorTheme}
+                fontSize={parseInt(fontSize, 10)}
+              />
             </div>
           </div>
         </div>
