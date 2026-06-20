@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Mail, Lock, ArrowRight } from "lucide-react";
 import { Logo } from "@/components/Logo";
+import { NetworkCanvas } from "@/components/three/NetworkCanvas";
 import { useState } from "react";
 
 export default function LoginPage() {
@@ -51,8 +52,9 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8 bg-background">
-      <div className="sm:mx-auto sm:w-full sm:max-w-md">
+    <div className="relative min-h-screen flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8 bg-background overflow-hidden">
+      <NetworkCanvas className="absolute inset-0 w-full h-full opacity-50 [mask-image:radial-gradient(ellipse_at_center,black_10%,transparent_70%)]" />
+      <div className="relative sm:mx-auto sm:w-full sm:max-w-md">
         <div className="flex justify-center">
           <Logo size="lg" />
         </div>
