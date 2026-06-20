@@ -6,7 +6,11 @@ import { Logo } from "@/components/Logo";
 import { NetworkCanvas } from "@/components/three/NetworkCanvas";
 import { TiltCard } from "@/components/TiltCard";
 import { Reveal, stagger, fadeUp } from "@/components/motion/Reveal";
+import { FluidBackdrop } from "@/components/motion/FluidBackdrop";
+import { Marquee } from "@/components/motion/Marquee";
 import { Link000, Link001 } from "@/components/ui/skiper-ui/skiper40";
+
+const trustedBy = ["Google", "Amazon", "Microsoft", "Meta", "Netflix", "Adobe", "Stripe", "Uber"];
 
 const features = [
   { icon: Code2, title: "150+ Curated Problems", desc: "Hand-picked DSA questions commonly asked at FAANG and top tech companies.", color: "text-blue-500", bg: "bg-blue-500/10" },
@@ -40,7 +44,9 @@ export default function LandingPage() {
       <main>
         {/* Hero with 3D network */}
         <div className="relative pt-32 pb-20 lg:pt-44 lg:pb-32 overflow-hidden">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-brand-light/40 via-background to-background" />
+          {/* Antigravity-style flowing gradient */}
+          <FluidBackdrop />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-transparent via-background/40 to-background" />
           {/* Interactive 3D node network */}
           <NetworkCanvas className="absolute inset-0 w-full h-full opacity-70 [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_75%)]" />
 
@@ -52,7 +58,7 @@ export default function LandingPage() {
               </motion.div>
               <motion.h1 variants={fadeUp} className="text-5xl lg:text-7xl font-bold tracking-tight text-foreground mb-6">
                 Master Coding Interviews with{" "}
-                <span className="bg-gradient-to-r from-brand to-accent-violet bg-clip-text text-transparent">AI</span>
+                <span className="animate-gradient-text bg-gradient-to-r from-brand via-accent-violet to-brand bg-clip-text text-transparent">AI</span>
               </motion.h1>
               <motion.p variants={fadeUp} className="text-xl text-muted-foreground mb-10 max-w-2xl mx-auto leading-relaxed">
                 Your personal AI mentor for data structures, algorithms, and system design. Practice, get instant feedback, and land your dream role at top tech companies.
@@ -65,6 +71,11 @@ export default function LandingPage() {
                 <Link href="#features" className="w-full sm:w-auto inline-flex items-center justify-center rounded-xl bg-card border border-border px-8 py-4 text-base font-medium text-foreground hover:bg-muted transition-all">
                   View Features
                 </Link>
+              </motion.div>
+
+              <motion.div variants={fadeUp} className="mt-14">
+                <p className="text-xs uppercase tracking-widest text-muted-foreground/70 mb-4">Trusted by engineers preparing for</p>
+                <Marquee items={trustedBy} />
               </motion.div>
             </motion.div>
 

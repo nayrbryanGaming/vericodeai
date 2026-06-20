@@ -112,6 +112,32 @@ body {
 }
 .aurora-blob { animation: aurora-drift 22s ease-in-out infinite; will-change: transform; }
 .aurora-blob-2 { animation-duration: 28s; animation-direction: reverse; }
+
+/* Antigravity-style flowing gradient — transform-only (GPU composited, cheap).
+   The blurred layer is rasterised once; only rotate/scale animate. */
+@keyframes fluid-spin {
+  0%   { transform: translate(-50%, -50%) rotate(0deg) scale(1); }
+  50%  { transform: translate(-50%, -50%) rotate(180deg) scale(1.18); }
+  100% { transform: translate(-50%, -50%) rotate(360deg) scale(1); }
+}
+@keyframes fluid-spin-rev {
+  0%   { transform: translate(-50%, -50%) rotate(0deg) scale(1.12); }
+  100% { transform: translate(-50%, -50%) rotate(-360deg) scale(1.12); }
+}
+.fluid-a { animation: fluid-spin 30s linear infinite; will-change: transform; }
+.fluid-b { animation: fluid-spin-rev 42s linear infinite; will-change: transform; }
+
+/* Shimmering gradient text */
+@keyframes gradient-shimmer {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+.animate-gradient-text { background-size: 220% auto; animation: gradient-shimmer 6s ease-in-out infinite; }
+
+/* Seamless marquee (duplicate content inside) */
+@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.animate-marquee { animation: marquee 32s linear infinite; will-change: transform; }
+
 @media (prefers-reduced-motion: reduce) {
-  .aurora-blob { animation: none; }
+  .aurora-blob, .fluid-a, .fluid-b, .animate-gradient-text, .animate-marquee { animation: none; }
 }
