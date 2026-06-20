@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { Medal } from "lucide-react";
+import { Counter } from "@/components/motion/Counter";
 
 const periods = ["Daily", "Weekly", "Monthly", "All Time"];
 const types = ["Global", "College", "Company"];
@@ -72,7 +73,7 @@ export default function LeaderboardPage() {
           </div>
           <h3 className="font-bold text-foreground">Priya Patel</h3>
           <p className="text-xs text-muted-foreground">@priya_p</p>
-          <div className="mt-3 text-lg font-bold text-brand">9,210 <span className="text-xs font-normal text-muted-foreground">pts</span></div>
+          <div className="mt-3 text-lg font-bold text-brand"><Counter value={9210} /> <span className="text-xs font-normal text-muted-foreground">pts</span></div>
         </div>
         
         <div className="order-1 md:order-2 flex flex-col items-center bg-brand/5 rounded-xl border border-brand/20 p-6 relative">
@@ -83,7 +84,7 @@ export default function LeaderboardPage() {
           </div>
           <h3 className="font-bold text-foreground text-lg">Arjun Sharma</h3>
           <p className="text-xs text-muted-foreground">@arjun_s</p>
-          <div className="mt-3 text-xl font-bold text-brand">9,820 <span className="text-xs font-normal text-muted-foreground">pts</span></div>
+          <div className="mt-3 text-xl font-bold text-brand"><Counter value={9820} /> <span className="text-xs font-normal text-muted-foreground">pts</span></div>
         </div>
 
         <div className="order-3 md:order-3 flex flex-col items-center bg-card rounded-xl border border-border p-6 mt-12 relative">
@@ -93,7 +94,7 @@ export default function LeaderboardPage() {
           </div>
           <h3 className="font-bold text-foreground">Rohan Gupta</h3>
           <p className="text-xs text-muted-foreground">@rohan_g</p>
-          <div className="mt-3 text-base font-bold text-brand">8,890 <span className="text-xs font-normal text-muted-foreground">pts</span></div>
+          <div className="mt-3 text-base font-bold text-brand"><Counter value={8890} /> <span className="text-xs font-normal text-muted-foreground">pts</span></div>
         </div>
       </div>
 

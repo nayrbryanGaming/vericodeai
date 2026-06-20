@@ -1,7 +1,9 @@
 "use client";
 import { Code2, Flame, Trophy, TrendingUp, CheckCircle2, Circle } from "lucide-react";
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import { StatCardSkeleton } from "@/components/Skeleton";
+import { stagger, fadeUp } from "@/components/motion/Reveal";
 
 export default function DashboardPage() {
   const [userName, setUserName] = useState("Developer");
@@ -60,19 +62,29 @@ export default function DashboardPage() {
       </div>
 
       {/* Stats grid */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        {loading
-          ? [0, 1, 2, 3].map((i) => <StatCardSkeleton key={i} />)
-          : stats.map((s) => (
-              <div key={s.label} className="bg-card rounded-xl border border-border p-4">
-                <div className={`w-9 h-9 rounded-lg ${s.bg} flex items-center justify-center mb-3`}>
-                  <s.icon size={17} className={s.color} />
-                </div>
-                <div className="text-2xl font-bold text-foreground">{s.value}</div>
-                <div className="text-xs text-muted-foreground mt-0.5">{s.label}</div>
+      {loading ? (
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          {[0, 1, 2, 3].map((i) => <StatCardSkeleton key={i} />)}
+        </div>
+      ) : (
+        <motion.div variants={stagger} initial="hidden" animate="show" className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          {stats.map((s) => (
+            <motion.div
+              key={s.label}
+              variants={fadeUp}
+              whileHover={{ y: -4 }}
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              className="bg-card rounded-xl border border-border p-4 hover:border-brand/30 hover:shadow-lg hover:shadow-brand/5 transition-colors"
+            >
+              <div className={`w-9 h-9 rounded-lg ${s.bg} flex items-center justify-center mb-3`}>
+                <s.icon size={17} className={s.color} />
               </div>
-            ))}
-      </div>
+              <div className="text-2xl font-bold text-foreground">{s.value}</div>
+              <div className="text-xs text-muted-foreground mt-0.5">{s.label}</div>
+            </motion.div>
+          ))}
+        </motion.div>
+      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
         {/* Language progress */}
@@ -86,7 +98,12 @@ export default function DashboardPage() {
                   <span className="text-muted-foreground">{l.pct}%</span>
                 </div>
                 <div className="h-2 bg-input/30 rounded-full overflow-hidden">
-                  <div className={`h-full rounded-full ${l.color} transition-all`} style={{ width: `${l.pct}%` }} />
+                  <motion.div
+                    className={`h-full rounded-full ${l.color}`}
+                    initial={{ width: 0 }}
+                    animate={{ width: `${l.pct}%` }}
+                    transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
+                  />
                 </div>
               </div>
             ))}
@@ -153,11 +170,13 @@ export default function DashboardPage() {
                 <div className="relative w-10 h-10">
                   <svg className="w-10 h-10 -rotate-90" viewBox="0 0 36 36">
                     <circle cx="18" cy="18" r="15" fill="none" stroke="currentColor" className="text-border" strokeWidth="3" />
-                    <circle
+                    <motion.circle
                       cx="18" cy="18" r="15" fill="none"
                       stroke="currentColor" className="text-brand" strokeWidth="3"
-                      strokeDasharray={`${(t.pct / 100) * 94.2} 94.2`}
                       strokeLinecap="round"
+                      initial={{ strokeDasharray: "0 94.2" }}
+                      animate={{ strokeDasharray: `${(t.pct / 100) * 94.2} 94.2` }}
+                      transition={{ duration: 0.9, ease: "easeOut", delay: 0.3 }}
                     />
                   </svg>
                   <span className="absolute inset-0 flex items-center justify-center text-xs font-semibold text-foreground">

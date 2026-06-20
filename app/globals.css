@@ -104,3 +104,14 @@ body {
 
 /* Subtle brand glow utility for premium accents */
 .brand-glow { box-shadow: 0 0 0 1px var(--brand-light), 0 8px 30px -12px var(--brand); }
+
+/* Ambient aurora — slow drift, disabled for reduced motion */
+@keyframes aurora-drift {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(40px, 30px, 0) scale(1.12); }
+}
+.aurora-blob { animation: aurora-drift 22s ease-in-out infinite; will-change: transform; }
+.aurora-blob-2 { animation-duration: 28s; animation-direction: reverse; }
+@media (prefers-reduced-motion: reduce) {
+  .aurora-blob { animation: none; }
+}
