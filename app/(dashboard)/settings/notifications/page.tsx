@@ -60,16 +60,16 @@ export default function NotificationsPage() {
   return (
     <div className="space-y-5">
       {/* Master toggle */}
-      <div className="bg-white border border-gray-200 rounded-xl p-5 flex items-center justify-between">
+      <div className="bg-card border border-border rounded-xl p-5 flex items-center justify-between">
         <div>
-          <p className="text-sm font-semibold text-gray-900">Notifications</p>
-          <p className="text-xs text-gray-400 mt-0.5">Control all notification preferences</p>
+          <p className="text-sm font-semibold text-foreground">Notifications</p>
+          <p className="text-xs text-muted-foreground mt-0.5">Control all notification preferences</p>
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-xs text-gray-500">Master Toggle</span>
+          <span className="text-xs text-muted-foreground">Master Toggle</span>
           <button
             onClick={() => setMasterToggle(!masterToggle)}
-            className={`w-10 h-5 rounded-full transition-colors relative ${masterToggle ? "bg-blue-600" : "bg-gray-200"}`}
+            className={`w-10 h-5 rounded-full transition-colors relative ${masterToggle ? "bg-brand" : "bg-input"}`}
           >
             <span
               className={`absolute top-0.5 w-4 h-4 bg-white rounded-full shadow transition-all ${masterToggle ? "left-5" : "left-0.5"}`}
@@ -80,8 +80,8 @@ export default function NotificationsPage() {
 
       {/* Notification groups */}
       {groups.map((g) => (
-        <div key={g.title} className="bg-white border border-gray-200 rounded-xl p-5">
-          <h2 className="text-sm font-semibold text-gray-900 mb-3">{g.title}</h2>
+        <div key={g.title} className="bg-card border border-border rounded-xl p-5">
+          <h2 className="text-sm font-semibold text-foreground mb-3">{g.title}</h2>
           <div className="space-y-3">
             {g.items.map((item) => (
               <label
@@ -92,13 +92,13 @@ export default function NotificationsPage() {
                   onClick={() => masterToggle && toggle(item.key)}
                   className={`mt-0.5 w-4 h-4 rounded border-2 flex items-center justify-center shrink-0 transition-colors ${
                     settings[item.key] && masterToggle
-                      ? "bg-blue-600 border-blue-600"
-                      : "border-gray-300 bg-white"
+                      ? "bg-brand border-brand"
+                      : "border-border bg-background"
                   } ${!masterToggle ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
                 >
-                  {settings[item.key] && masterToggle && <Check size={10} className="text-white" />}
+                  {settings[item.key] && masterToggle && <Check size={10} className="text-brand-foreground" />}
                 </div>
-                <span className={`text-sm text-gray-700 ${!masterToggle ? "opacity-50" : ""}`}>
+                <span className={`text-sm text-foreground ${!masterToggle ? "opacity-50" : ""}`}>
                   {item.label}
                 </span>
               </label>
@@ -109,7 +109,7 @@ export default function NotificationsPage() {
 
       <button
         onClick={handleSave}
-        className="flex items-center gap-2 bg-gray-900 text-white text-sm font-semibold px-5 py-2 rounded-lg hover:bg-gray-700 transition-colors"
+        className="flex items-center gap-2 bg-brand text-brand-foreground text-sm font-semibold px-5 py-2 rounded-lg hover:bg-brand-text transition-colors"
       >
         {saved && <Check size={14} />}
         {saved ? "Saved!" : "Save preferences"}

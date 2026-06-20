@@ -1,9 +1,11 @@
 "use client";
 import { Code2, Flame, Trophy, TrendingUp, CheckCircle2, Circle } from "lucide-react";
 import { useEffect, useState } from "react";
+import { StatCardSkeleton } from "@/components/Skeleton";
 
 export default function DashboardPage() {
   const [userName, setUserName] = useState("Developer");
+  const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState({
     solved: 0,
     projects: 0,
@@ -12,6 +14,7 @@ export default function DashboardPage() {
   });
 
   useEffect(() => {
+    // Simulate fetching the user profile/progress. Replace with GET /api/user/me.
     const data = localStorage.getItem("vericode_user");
     if (data) {
       try {
@@ -20,6 +23,8 @@ export default function DashboardPage() {
         if (parsed.progress) setProgress(parsed.progress);
       } catch (e) {}
     }
+    const t = setTimeout(() => setLoading(false), 450);
+    return () => clearTimeout(t);
   }, []);
 
   const stats = [
@@ -56,15 +61,17 @@ export default function DashboardPage() {
 
       {/* Stats grid */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        {stats.map((s) => (
-          <div key={s.label} className="bg-card rounded-xl border border-border p-4">
-            <div className={`w-9 h-9 rounded-lg ${s.bg} flex items-center justify-center mb-3`}>
-              <s.icon size={17} className={s.color} />
-            </div>
-            <div className="text-2xl font-bold text-foreground">{s.value}</div>
-            <div className="text-xs text-muted-foreground mt-0.5">{s.label}</div>
-          </div>
-        ))}
+        {loading
+          ? [0, 1, 2, 3].map((i) => <StatCardSkeleton key={i} />)
+          : stats.map((s) => (
+              <div key={s.label} className="bg-card rounded-xl border border-border p-4">
+                <div className={`w-9 h-9 rounded-lg ${s.bg} flex items-center justify-center mb-3`}>
+                  <s.icon size={17} className={s.color} />
+                </div>
+                <div className="text-2xl font-bold text-foreground">{s.value}</div>
+                <div className="text-xs text-muted-foreground mt-0.5">{s.label}</div>
+              </div>
+            ))}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">

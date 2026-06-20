@@ -10,7 +10,7 @@ export function Logo({
   className?: string;
   size?: "sm" | "md" | "lg";
 }) {
-  const [isDark, setIsDark] = useState(false);
+  const [isDark, setIsDark] = useState(true); // dark is the global default
 
   useEffect(() => {
     // Check initial state

@@ -15,7 +15,7 @@ export default function SettingsLayout({ children }: { children: React.ReactNode
   const pathname = usePathname();
   return (
     <div className="max-w-4xl space-y-5">
-      <h1 className="text-xl font-bold text-gray-900">Settings</h1>
+      <h1 className="text-xl font-bold text-foreground">Settings</h1>
       <div className="flex flex-col sm:flex-row gap-6">
         {/* Sidebar nav */}
         <aside className="sm:w-44 shrink-0">
@@ -28,7 +28,7 @@ export default function SettingsLayout({ children }: { children: React.ReactNode
                   href={t.href}
                   className={cn(
                     "flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors",
-                    active ? "bg-blue-50 text-blue-700" : "text-gray-600 hover:bg-gray-100"
+                    active ? "bg-brand-light text-brand-text" : "text-muted-foreground hover:bg-muted hover:text-foreground"
                   )}
                 >
                   <t.icon size={15} className="shrink-0" />

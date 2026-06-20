@@ -5,6 +5,9 @@
 import { useState } from "react";
 import { Eye, EyeOff, Shield, Check } from "lucide-react";
 
+const inputCls =
+  "w-full px-3 py-2 pr-10 text-sm border border-border rounded-lg bg-background text-foreground outline-none focus:border-brand focus:ring-2 focus:ring-brand-light transition-all";
+
 export default function PrivacyPage() {
   const [passwords, setPasswords] = useState({ current: "", new: "", confirm: "" });
   const [show, setShow] = useState({ current: false, new: false, confirm: false });
@@ -33,18 +36,18 @@ export default function PrivacyPage() {
   return (
     <div className="space-y-5">
       {/* Change password */}
-      <div className="bg-white border border-gray-200 rounded-xl p-6">
+      <div className="bg-card border border-border rounded-xl p-6">
         <div className="flex items-center gap-2 mb-5">
-          <Shield size={16} className="text-gray-500" />
-          <h2 className="text-base font-semibold text-gray-900">Change password</h2>
+          <Shield size={16} className="text-muted-foreground" />
+          <h2 className="text-base font-semibold text-foreground">Change password</h2>
         </div>
         {error && (
-          <div className="mb-4 text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg p-3">{error}</div>
+          <div className="mb-4 text-sm text-destructive bg-destructive/10 border border-destructive/20 rounded-lg p-3">{error}</div>
         )}
         <form onSubmit={handlePasswordChange} className="space-y-4">
           {(["current", "new", "confirm"] as const).map((k) => (
             <div key={k}>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5 capitalize">
+              <label className="block text-sm font-medium text-foreground mb-1.5 capitalize">
                 {k === "current" ? "Current password" : k === "new" ? "New password" : "Confirm new password"}
               </label>
               <div className="relative">
@@ -52,10 +55,10 @@ export default function PrivacyPage() {
                   type={show[k] ? "text" : "password"}
                   value={passwords[k]}
                   onChange={(e) => setPasswords((p) => ({ ...p, [k]: e.target.value }))}
-                  className="w-full px-3 py-2 pr-10 text-sm border border-gray-300 rounded-lg outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all"
+                  className={inputCls}
                   autoComplete={k === "current" ? "current-password" : "new-password"}
                 />
-                <button type="button" onClick={() => setShow((p) => ({ ...p, [k]: !p[k] }))} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                <button type="button" onClick={() => setShow((p) => ({ ...p, [k]: !p[k] }))} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
                   {show[k] ? <EyeOff size={14} /> : <Eye size={14} />}
                 </button>
               </div>
@@ -64,7 +67,7 @@ export default function PrivacyPage() {
           <button
             type="submit"
             disabled={saving}
-            className="flex items-center gap-2 bg-gray-900 text-white text-sm font-semibold px-5 py-2 rounded-lg hover:bg-gray-700 transition-colors disabled:opacity-50"
+            className="flex items-center gap-2 bg-brand text-brand-foreground text-sm font-semibold px-5 py-2 rounded-lg hover:bg-brand-text transition-colors disabled:opacity-50"
           >
             {saved && <Check size={14} />}
             {saving ? "Updating..." : saved ? "Updated!" : "Update password"}
@@ -73,21 +76,21 @@ export default function PrivacyPage() {
       </div>
 
       {/* Active sessions */}
-      <div className="bg-white border border-gray-200 rounded-xl p-6">
-        <h2 className="text-base font-semibold text-gray-900 mb-4">Active sessions</h2>
+      <div className="bg-card border border-border rounded-xl p-6">
+        <h2 className="text-base font-semibold text-foreground mb-4">Active sessions</h2>
         <div className="space-y-3">
           {sessions.map((s) => (
-            <div key={s.id} className="flex items-center justify-between py-2.5 px-3 rounded-lg border border-gray-100 bg-gray-50">
+            <div key={s.id} className="flex items-center justify-between py-2.5 px-3 rounded-lg border border-border bg-muted/40">
               <div>
                 <div className="flex items-center gap-2">
-                  <p className="text-sm font-medium text-gray-900">{s.device}</p>
-                  {s.current && <span className="text-xs bg-green-100 text-green-700 px-1.5 py-0.5 rounded font-medium">Current</span>}
+                  <p className="text-sm font-medium text-foreground">{s.device}</p>
+                  {s.current && <span className="text-xs bg-green-500/15 text-green-500 px-1.5 py-0.5 rounded font-medium">Current</span>}
                 </div>
-                <p className="text-xs text-gray-400 mt-0.5">{s.location} · {s.lastSeen}</p>
+                <p className="text-xs text-muted-foreground mt-0.5">{s.location} · {s.lastSeen}</p>
               </div>
               {!s.current && (
                 // TODO (backend): DELETE /api/user/sessions/{id}
-                <button className="text-xs text-red-500 hover:text-red-700 font-medium">Revoke</button>
+                <button className="text-xs text-destructive hover:opacity-80 font-medium">Revoke</button>
               )}
             </div>
           ))}
@@ -95,25 +98,25 @@ export default function PrivacyPage() {
       </div>
 
       {/* 2FA placeholder */}
-      <div className="bg-white border border-gray-200 rounded-xl p-6">
+      <div className="bg-card border border-border rounded-xl p-6">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-sm font-semibold text-gray-900">Two-factor authentication</h2>
-            <p className="text-xs text-gray-400 mt-0.5">Add an extra layer of security to your account.</p>
+            <h2 className="text-sm font-semibold text-foreground">Two-factor authentication</h2>
+            <p className="text-xs text-muted-foreground mt-0.5">Add an extra layer of security to your account.</p>
           </div>
           {/* TODO (backend): POST /api/user/2fa/enable */}
-          <button className="text-sm font-medium text-blue-600 hover:text-blue-500">Enable</button>
+          <button className="text-sm font-medium text-brand-text hover:opacity-80">Enable</button>
         </div>
       </div>
 
       {/* Danger zone */}
-      <div className="border border-red-200 rounded-xl p-5">
-        <h2 className="text-sm font-semibold text-red-600 mb-3">Danger Zone</h2>
+      <div className="border border-destructive/30 rounded-xl p-5">
+        <h2 className="text-sm font-semibold text-destructive mb-3">Danger Zone</h2>
         {/* TODO (backend): DELETE /api/user/me */}
-        <button className="text-sm font-medium text-red-600 border border-red-300 px-4 py-1.5 rounded-lg hover:bg-red-50 transition-colors">
+        <button className="text-sm font-medium text-destructive border border-destructive/40 px-4 py-1.5 rounded-lg hover:bg-destructive/10 transition-colors">
           Delete account
         </button>
-        <p className="text-xs text-gray-400 mt-2">Once you delete your account, there is no going back. Please be certain.</p>
+        <p className="text-xs text-muted-foreground mt-2">Once you delete your account, there is no going back. Please be certain.</p>
       </div>
     </div>
   );
