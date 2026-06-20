@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef } from "react";
+import { heavyFxCapable } from "../fx";
 
 /**
  * Interactive 3D node network on a raw <canvas> — evokes the VeriCode
@@ -29,19 +30,25 @@ export function NetworkCanvas({ className = "" }: { className?: string }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
+    // Hard gate: never run the animation on weak/old devices (reliability first).
+    if (!heavyFxCapable()) return;
+
     const cv = canvasRef.current;
     if (!cv) return;
-    const g = cv.getContext("2d", { alpha: true });
+    let g: CanvasRenderingContext2D | null = null;
+    try {
+      g = cv.getContext("2d", { alpha: true });
+    } catch {
+      return;
+    }
     if (!g) return;
 
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const cores = navigator.hardwareConcurrency || 4;
-    const lowEnd = cores <= 4 || Math.min(window.innerWidth, window.innerHeight) < 640;
-
-    const dpr = Math.min(window.devicePixelRatio || 1, lowEnd ? 1 : 1.5);
-    const COUNT = lowEnd ? 40 : 72;
-    const EDGE_DIST = lowEnd ? 0.3 : 0.34;
-    const minFrameMs = lowEnd ? 1000 / 30 : 1000 / 60;
+    // Capped low to stay light even on capable machines.
+    const dpr = 1;
+    const COUNT = 56;
+    const EDGE_DIST = 0.32;
+    const minFrameMs = 1000 / 30;
 
     // Fibonacci sphere of nodes (+ a few inner ones for depth).
     const nodes: Node[] = [];
