@@ -299,7 +299,7 @@ export function WaterShader({ className = "" }: { className?: string }) {
     let W = 0, H = 0;
     function resize() {
       const el = containerRef.current;
-      if (!el) return;
+      if (!el || !glCanvas || !bokehCanvas) return;
       W = el.offsetWidth;
       H = el.offsetHeight;
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -322,6 +322,8 @@ export function WaterShader({ className = "" }: { className?: string }) {
       raf = requestAnimationFrame(loop);
       if (!start) start = now;
       const t = (now - start) * 0.001;
+
+      if (!glCanvas || !bokehCanvas) return;
 
       // WebGL water
       gl.uniform1f(uTime, t);
